@@ -7,11 +7,16 @@ import {
 
 const CARDS_COUNT = 10;
 
+const COORDS = {
+  MIN_X: 35.65000,
+  MAX_X: 35.70000,
+  MIN_Y: 139.70000,
+  MAX_Y: 139.80000,
+};
+
 const TITLES = [
-  'Дворец',
-  'Квартира',
-  'Дом',
-  'Бунгало',
+  'Сдается отличное жилье',
+  'Сдается отличное жилье',
 ];
 
 const TYPES = [
@@ -54,8 +59,8 @@ const PHOTOS = [
  * @returns {object} — объект
  */
 const createAd = () => {
-  const locationX = getRandomFloatNubmerFromRange(35.65000, 35.70000, 5);
-  const locationY = getRandomFloatNubmerFromRange(139.70000, 139.80000, 5);
+  const locationX = getRandomFloatNubmerFromRange(COORDS.MIN_X, COORDS.MAX_X, 5);
+  const locationY = getRandomFloatNubmerFromRange(COORDS.MIN_Y, COORDS.MAX_Y, 5);
   return {
     author: {
       avatar: 'img/avatars/user0' + getRandomNubmerFromRange(1, 8) + '.png', // это случайное число от 1 до 8 с ведущим нулём.
@@ -65,7 +70,7 @@ const createAd = () => {
       address: locationX + ', ' + locationY, // строка — адрес предложения. Для простоты пусть пока составляется из географических координат по маске
       price: getRandomNubmerFromRange(10, 5000), // число — стоимость. Любое положительное число.
       type: getRandomElementFromArray(TYPES), // строка — одно из четырёх фиксированных значений.
-      rooms: getRandomNubmerFromRange(2, 10), // число — количество комнат. Любое положительное число.
+      rooms: getRandomNubmerFromRange(1, 10), // число — количество комнат. Любое положительное число.
       guests: getRandomNubmerFromRange(1, 15), // число — количество гостей, которое можно разместить. Любое положительное число.
       checkin: getRandomElementFromArray(CHECK_TIMES), // строка — одно из трёх фиксированных значений.
       checkout: getRandomElementFromArray(CHECK_TIMES), // строка — одно из трёх фиксированных значений.
@@ -80,8 +85,15 @@ const createAd = () => {
   };
 };
 
-const similarAds = new Array(CARDS_COUNT).fill(null).map(() => createAd());
+const createSimilarAds = (quantity) => {
+  let cardsList = [];
+  for (let i = 0; i < quantity; i++) {
+    cardsList.push(createAd());
+  }
+  return cardsList;
+}
 
 export {
-  similarAds
+  CARDS_COUNT,
+  createSimilarAds
 };
