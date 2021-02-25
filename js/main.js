@@ -1,5 +1,2 @@
-import {
-  similarAds
-} from './data.js';
-
-console.log(similarAds);
+import './data.js';
+import './card.js';
