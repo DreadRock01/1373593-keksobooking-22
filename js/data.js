@@ -7,7 +7,7 @@ import {
 
 const CARDS_COUNT = 10;
 
-const COORDS = {
+const Coords = {
   MIN_X: 35.65000,
   MAX_X: 35.70000,
   MIN_Y: 139.70000,
@@ -59,8 +59,8 @@ const PHOTOS = [
  * @returns {object} — объект
  */
 const createAd = () => {
-  const locationX = getRandomFloatNubmerFromRange(COORDS.MIN_X, COORDS.MAX_X, 5);
-  const locationY = getRandomFloatNubmerFromRange(COORDS.MIN_Y, COORDS.MAX_Y, 5);
+  const locationX = getRandomFloatNubmerFromRange(Coords.MIN_X, Coords.MAX_X, 5);
+  const locationY = getRandomFloatNubmerFromRange(Coords.MIN_Y, Coords.MAX_Y, 5);
   return {
     author: {
       avatar: 'img/avatars/user0' + getRandomNubmerFromRange(1, 8) + '.png', // это случайное число от 1 до 8 с ведущим нулём.
@@ -85,6 +85,11 @@ const createAd = () => {
   };
 };
 
+/**
+ * Функция генерации массива объектов похожих объявлений
+ * @param  {number} quantity // количество элементов массива
+ * @returns  {array} // массив объектов похожих объявлений
+ */
 const createSimilarAds = (quantity) => {
   let cardsList = [];
   for (let i = 0; i < quantity; i++) {

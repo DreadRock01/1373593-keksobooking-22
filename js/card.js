@@ -1,9 +1,4 @@
 import {
-  CARDS_COUNT,
-  createSimilarAds
-} from './data.js';
-
-import {
   changeWordsFormat
 } from './util.js';
 
@@ -36,29 +31,39 @@ const similarCardTemplate = document.querySelector('#card')
   .content
   .querySelector('.popup');
 
-const createSimilarCards = (renderAd) => {
+const createCard = (renderAd) => {
   const cardElement = similarCardTemplate.cloneNode(true);
   const featuresList = cardElement.querySelector('.popup__features');
   const imagesList = cardElement.querySelector('.popup__photos');
 
-  const createFeaturesList = () => { // функция для создания списка преимуществ
+  const createFeaturesList = () => { // функция для создания списка преимуществ, если данных не хватает, то блок удаляется. (чекни слак, я хотел уточнить насчет этого)
     featuresList.textContent = '';
-    for (let i = 0; i < renderAd.offer.features.length; i++) {
-      let featureItem = document.createElement('li');
-      featureItem.classList.add('popup__feature', `popup__feature--${renderAd.offer.features[i]}`);
-      featuresList.appendChild(featureItem);
+    const features = renderAd.offer.features;
+    if (features.length) {
+      renderAd.offer.features.forEach((item, i) => {
+        let featureItem = document.createElement('li');
+        featureItem.classList.add('popup__feature', `popup__feature--${renderAd.offer.features[i]}`);
+        featuresList.appendChild(featureItem);
+      });
+    } else {
+      featuresList.remove();
     }
   };
 
-  const createImagesList = () => { // функция для создания списка фото
+  const createImagesList = () => { // функция для создания списка фото, если данных не хватает, то блок удаляется.
     imagesList.textContent = '';
-    for (let i = 0; i < renderAd.offer.photos.length; i++) {
-      let imageItem = document.createElement('img');
-      imageItem.src = renderAd.offer.photos[i];
-      imageItem.classList.add('popup__photo'); // отступы
-      imageItem.style.width = `${imagesSizes.WIDTH}px`;
-      imageItem.style.height = `${imagesSizes.HEIGHT}px`;
-      imagesList.appendChild(imageItem);
+    const images = renderAd.offer.photos;
+    if (images.length) {
+      renderAd.offer.photos.forEach((item, i) => {
+        let imageItem = document.createElement('img');
+        imageItem.src = renderAd.offer.photos[i];
+        imageItem.classList.add('popup__photo'); // отступы
+        imageItem.style.width = `${imagesSizes.WIDTH}px`;
+        imageItem.style.height = `${imagesSizes.HEIGHT}px`;
+        imagesList.appendChild(imageItem);
+      });
+    } else {
+      imagesList.remove();
     }
   };
 
@@ -70,16 +75,12 @@ const createSimilarCards = (renderAd) => {
   cardElement.querySelector('.popup__text--time').textContent = `Заезд после ${renderAd.offer.checkin}, выезд до ${renderAd.offer.checkout}`;
   cardElement.querySelector('.popup__description').textContent = renderAd.offer.description;
   cardElement.querySelector('.popup__avatar').src = renderAd.author.avatar;
-  if (renderAd.offer.features.length) {
-    createFeaturesList();
-  }
-  if (renderAd.offer.photos.length) {
-    createImagesList();
-  }
+  createFeaturesList();
+  createImagesList();
   return cardElement;
 };
 
-let similarAds = createSimilarAds(CARDS_COUNT);
-let similarCards = createSimilarCards(similarAds[0]);
-
-cardsOnCanvas.appendChild(similarCards);
+export {
+  cardsOnCanvas,
+  createCard
+};
