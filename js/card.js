@@ -2,6 +2,8 @@ import {
   changeWordsFormat
 } from './util.js';
 
+import './data.js';
+
 const offerType = {
   palace: 'Дворец',
   flat: 'Квартира',
@@ -26,7 +28,6 @@ const imagesSizes = {
   HEIGHT: 40,
 };
 
-const cardsOnCanvas = document.querySelector('#map-canvas');
 const similarCardTemplate = document.querySelector('#card')
   .content
   .querySelector('.popup');
@@ -36,13 +37,16 @@ const createCard = (renderAd) => {
   const featuresList = cardElement.querySelector('.popup__features');
   const imagesList = cardElement.querySelector('.popup__photos');
 
-  const createFeaturesList = () => { // функция для создания списка преимуществ, если данных не хватает, то блок удаляется. (чекни слак, я хотел уточнить насчет этого)
+  /**
+   * Функция создания списка преимуществ. Если данных не хватает, то блок удаляется.
+   */
+  const createFeaturesList = () => {
     featuresList.textContent = '';
     const features = renderAd.offer.features;
     if (features.length) {
-      renderAd.offer.features.forEach((item, i) => {
+      features.forEach((feature, i) => {
         let featureItem = document.createElement('li');
-        featureItem.classList.add('popup__feature', `popup__feature--${renderAd.offer.features[i]}`);
+        featureItem.classList.add('popup__feature', `popup__feature--${features[i]}`);
         featuresList.appendChild(featureItem);
       });
     } else {
@@ -50,14 +54,17 @@ const createCard = (renderAd) => {
     }
   };
 
-  const createImagesList = () => { // функция для создания списка фото, если данных не хватает, то блок удаляется.
+  /**
+   * Функция создания списка фото. Если данных не хватает, то блок удаляется.
+   */
+  const createImagesList = () => {
     imagesList.textContent = '';
     const images = renderAd.offer.photos;
     if (images.length) {
-      renderAd.offer.photos.forEach((item, i) => {
+      images.forEach((image, i) => {
         let imageItem = document.createElement('img');
-        imageItem.src = renderAd.offer.photos[i];
-        imageItem.classList.add('popup__photo'); // отступы
+        imageItem.src = images[i];
+        imageItem.classList.add('popup__photo');
         imageItem.style.width = `${imagesSizes.WIDTH}px`;
         imageItem.style.height = `${imagesSizes.HEIGHT}px`;
         imagesList.appendChild(imageItem);
@@ -81,6 +88,5 @@ const createCard = (renderAd) => {
 };
 
 export {
-  cardsOnCanvas,
   createCard
 };

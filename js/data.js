@@ -98,7 +98,9 @@ const createSimilarAds = (quantity) => {
   return cardsList;
 }
 
+let similarAds = createSimilarAds(CARDS_COUNT);
+
 export {
   CARDS_COUNT,
-  createSimilarAds
+  similarAds
 };
