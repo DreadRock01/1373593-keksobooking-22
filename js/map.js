@@ -1,17 +1,11 @@
 /* global L:readonly */
 import {
-  setFormEnabled
+  setFormState
 } from './form.js';
 
 import {
-  similarAds
-} from './data.js';
-
-import {
-  createCard
+  renderCard
 } from './card.js'
-
-const addressField = document.querySelector('#address');
 
 const defaultCoords = {
   lat: 35.65850,
@@ -20,7 +14,7 @@ const defaultCoords = {
 
 const map = L.map('map-canvas')
   .on('load', () => {
-    setFormEnabled();
+    setFormState(true);
   })
   .setView({
     lat: defaultCoords.lat,
@@ -32,6 +26,7 @@ L.tileLayer(
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   },
 ).addTo(map);
+
 
 const mainPinIcon = L.icon({
   iconUrl: 'img/main-pin.svg',
@@ -48,13 +43,16 @@ const mainMarker = L.marker(
     icon: mainPinIcon,
   },
 );
-
 mainMarker.addTo(map);
+
+const addressField = document.querySelector('#address');
+addressField.setAttribute('readonly', true);
+addressField.value = `${defaultCoords.lat.toFixed(5)}, ${defaultCoords.lng.toFixed(5)}`;
 
 /**
  * Функция отображения координат в строке "Адрес", в зависимости от положения основной метки
  */
-mainMarker.on('moveend', (evt) => {
+mainMarker.on('move', (evt) => {
   let markerCoords = evt.target.getLatLng();
   addressField.value = `${markerCoords.lat.toFixed(5)}, ${markerCoords.lng.toFixed(5)}`;
 });
@@ -62,29 +60,34 @@ mainMarker.on('moveend', (evt) => {
 /**
  * Функция создания 10 рандомных меток по шаблону
  */
-similarAds.forEach(({author, offer, location}) => {
-  const icon = L.icon({
-    iconUrl: 'img/pin.svg',
-    iconSize: [40, 40],
-    iconAnchor: [20, 40],
-  });
+const renderPins = (pins) => {
+  pins.forEach(({author, offer, location}) => {
+    const icon = L.icon({
+      iconUrl: 'img/pin.svg',
+      iconSize: [40, 40],
+      iconAnchor: [20, 40],
+    });
 
-  const marker = L.marker(
-    {
-      lat: location.x,
-      lng: location.y,
-    },
-    {
-      icon,
-    },
-  );
-
-  marker
-    .addTo(map)
-    .bindPopup(
-      createCard({author, offer}),
+    const marker = L.marker(
       {
-        keepInView: true,
+        lat: location.x,
+        lng: location.y,
+      },
+      {
+        icon,
       },
     );
-});
+
+    marker
+      .addTo(map)
+      .bindPopup(
+        renderCard({author, offer}), {
+          keepInView: true,
+        },
+      );
+  });
+};
+
+export {
+  renderPins
+};
