@@ -1,7 +1,13 @@
-import './data.js';
+import {
+  similarAds
+} from './data.js';
 
-import './card.js';
-
-import './map.js';
+import {
+  renderPins
+} from './map.js';
 
 import './form.js';
+
+import './validation.js';
+
+renderPins(similarAds);

@@ -2,8 +2,6 @@ import {
   changeWordsFormat
 } from './util.js';
 
-import './data.js';
-
 const offerType = {
   palace: 'Дворец',
   flat: 'Квартира',
@@ -32,7 +30,7 @@ const similarCardTemplate = document.querySelector('#card')
   .content
   .querySelector('.popup');
 
-const createCard = (renderAd) => {
+const renderCard = ({author, offer}) => {
   const cardElement = similarCardTemplate.cloneNode(true);
   const featuresList = cardElement.querySelector('.popup__features');
   const imagesList = cardElement.querySelector('.popup__photos');
@@ -40,13 +38,13 @@ const createCard = (renderAd) => {
   /**
    * Функция создания списка преимуществ. Если данных не хватает, то блок удаляется.
    */
-  const createFeaturesList = () => {
+  const createFeaturesList = () => {  // стоит ли параметризировать, если функции завернуты под блок renderCard? и завязаны на определенных дом нодах (featuresList, imagesList)
     featuresList.textContent = '';
-    const features = renderAd.offer.features;
+    const features = offer.features;
     if (features.length) {
-      features.forEach((feature, i) => {
+      features.forEach((feature) => {
         let featureItem = document.createElement('li');
-        featureItem.classList.add('popup__feature', `popup__feature--${features[i]}`);
+        featureItem.classList.add('popup__feature', `popup__feature--${feature}`);
         featuresList.appendChild(featureItem);
       });
     } else {
@@ -59,11 +57,11 @@ const createCard = (renderAd) => {
    */
   const createImagesList = () => {
     imagesList.textContent = '';
-    const images = renderAd.offer.photos;
+    const images = offer.photos;
     if (images.length) {
-      images.forEach((image, i) => {
+      images.forEach((image) => {
         let imageItem = document.createElement('img');
-        imageItem.src = images[i];
+        imageItem.src = image;
         imageItem.classList.add('popup__photo');
         imageItem.style.width = `${imagesSizes.WIDTH}px`;
         imageItem.style.height = `${imagesSizes.HEIGHT}px`;
@@ -74,19 +72,19 @@ const createCard = (renderAd) => {
     }
   };
 
-  cardElement.querySelector('.popup__title').textContent = renderAd.offer.title;
-  cardElement.querySelector('.popup__text--address').textContent = renderAd.offer.address;
-  cardElement.querySelector('.popup__text--price').textContent = `${renderAd.offer.price} ₽/ночь`;
-  cardElement.querySelector('.popup__type').textContent = offerType[renderAd.offer.type];
-  cardElement.querySelector('.popup__text--capacity').textContent = `${renderAd.offer.rooms} ${changeWordsFormat(renderAd.offer.rooms, ROOMS)} для ${renderAd.offer.guests} ${changeWordsFormat(renderAd.offer.guests, GUESTS)}`;
-  cardElement.querySelector('.popup__text--time').textContent = `Заезд после ${renderAd.offer.checkin}, выезд до ${renderAd.offer.checkout}`;
-  cardElement.querySelector('.popup__description').textContent = renderAd.offer.description;
-  cardElement.querySelector('.popup__avatar').src = renderAd.author.avatar;
+  cardElement.querySelector('.popup__title').textContent = offer.title;
+  cardElement.querySelector('.popup__text--address').textContent = offer.address;
+  cardElement.querySelector('.popup__text--price').textContent = `${offer.price} ₽/ночь`;
+  cardElement.querySelector('.popup__type').textContent = offerType[offer.type];
+  cardElement.querySelector('.popup__text--capacity').textContent = `${offer.rooms} ${changeWordsFormat(offer.rooms, ROOMS)} для ${offer.guests} ${changeWordsFormat(offer.guests, GUESTS)}`;
+  cardElement.querySelector('.popup__text--time').textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
+  cardElement.querySelector('.popup__description').textContent = offer.description;
+  cardElement.querySelector('.popup__avatar').src = author.avatar;
   createFeaturesList();
   createImagesList();
   return cardElement;
 };
 
 export {
-  createCard
+  renderCard
 };
