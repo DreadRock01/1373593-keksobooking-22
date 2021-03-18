@@ -80,7 +80,7 @@ capacityVariants[2].disabled = false;
 roomNumberSelect.addEventListener('change', (evt) => {
   let roomValue = evt.target.value;
   capacityVariants.forEach((option) => {
-    if (roomsValues[roomValue].includes(+option.value)) { // '+' потому что типизация
+    if (roomsValues[roomValue].includes(+option.value)) {
       option.disabled = false;
       option.selected = true;
     } else {

@@ -1,13 +1,17 @@
 import {
-  similarAds
-} from './data.js';
+  getData
+} from './fetch.js'
 
 import {
   renderPins
 } from './map.js';
 
-import './form.js';
+// import {
+//   submitForm
+// } from './form.js';
 
 import './validation.js';
 
-renderPins(similarAds);
+getData(
+  (data) => renderPins(data),
+);
