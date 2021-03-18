@@ -7,6 +7,10 @@ import {
   renderCard
 } from './card.js'
 
+const ERR_SHOW_TIME = 5000;
+
+const addressField = document.querySelector('#address');
+
 const defaultCoords = {
   lat: 35.65850,
   lng: 139.78000,
@@ -19,7 +23,7 @@ const map = L.map('map-canvas')
   .setView({
     lat: defaultCoords.lat,
     lng: defaultCoords.lng,
-  }, 12);
+  }, 10);
 
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -44,8 +48,6 @@ const mainMarker = L.marker(
   },
 );
 mainMarker.addTo(map);
-
-const addressField = document.querySelector('#address');
 addressField.setAttribute('readonly', true);
 addressField.value = `${defaultCoords.lat.toFixed(5)}, ${defaultCoords.lng.toFixed(5)}`;
 
@@ -70,8 +72,8 @@ const renderPins = (pins) => {
 
     const marker = L.marker(
       {
-        lat: location.x,
-        lng: location.y,
+        lat: location.lat,
+        lng: location.lng,
       },
       {
         icon,
@@ -88,6 +90,48 @@ const renderPins = (pins) => {
   });
 };
 
+/**
+ * Функция показа ошибки на карте при загрузке данных объявлений
+ * @param {string} err текст ошибки
+ */
+const showErrorGetData = (err) => {
+  const mapContainer = document.querySelector('.map');
+  const errorContainer = document.createElement('div');
+
+  errorContainer.style.zIndex = 1000;
+  errorContainer.style.position = 'absolute';
+  errorContainer.style.left = 0;
+  errorContainer.style.top = 0;
+  errorContainer.style.right = 0;
+  errorContainer.style.padding = '14px 5px';
+  errorContainer.style.fontSize = '18px';
+  errorContainer.style.textAlign = 'center';
+  errorContainer.style.color = 'white';
+  errorContainer.style.backgroundColor = 'red';
+
+  errorContainer.textContent = err;
+
+  mapContainer.append(errorContainer);
+
+  setTimeout(() => {
+    errorContainer.remove();
+  }, ERR_SHOW_TIME);
+};
+
+/**
+ * Функция возврата карты, метки и ее координат к исходному состоянию
+ */
+const resetMap = () => {
+  addressField.value = `${defaultCoords.lat}, ${defaultCoords.lng}`;
+  mainMarker.setLatLng([defaultCoords.lat, defaultCoords.lng]);
+  map.setView({
+    lat: defaultCoords.lat,
+    lng: defaultCoords.lng,
+  }, 10);
+}
+
 export {
+  showErrorGetData,
+  resetMap,
   renderPins
 };
