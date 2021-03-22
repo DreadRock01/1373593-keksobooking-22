@@ -1,11 +1,11 @@
+const MAX_PRICE = 1000000;
+
 const minPriceOfRent = {
   bungalow: 0,
   flat: 1000,
   house: 5000,
   palace: 10000,
 }
-
-const MAX_PRICE = 1000000;
 
 const housingType = document.querySelector('#type');
 const pricePerNight = document.querySelector('#price');
