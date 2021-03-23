@@ -13,18 +13,18 @@ const housingRooms = mapFilters.querySelector('#housing-rooms');
 const housingGuests = mapFilters.querySelector('#housing-guests');
 const housingFeatures = mapFilters.querySelector('#housing-features');
 
-const PriceLength = {
-  LOW: {
-    MIN: 0,
-    MAX: 10000,
+const priceLength = {
+  low: {
+    min: 0,
+    max: 10000,
   },
-  MIDDLE: {
-    MIN: 10000,
-    MAX: 50000,
+  middle: {
+    min: 10000,
+    max: 50000,
   },
-  HIGH: {
-    MIN: 50000,
-    MAX: Infinity,
+  high: {
+    min: 50000,
+    max: Infinity,
   },
 };
 
@@ -57,7 +57,7 @@ const filterByType = (element) => {
  * @returns {*} проверка стоимости
  */
 const filterByPrice = (element) => {
-  const filteringPrice = PriceLength[housingPrice.value.toUpperCase()];
+  const filteringPrice = priceLength[housingPrice.value.toUpperCase()];
   if (housingPrice.value === 'any') {
     return true
   }

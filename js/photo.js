@@ -1,6 +1,7 @@
 const FILE_TYPES = ['jpg', 'png'];
 const DEFAULT_AVATAR_URL = ['img/muffin-grey.svg'];
-const photoPattern = {
+
+const PhotoPattern = {
   WIDTH: '70',
   HEIGHT: '70',
 }
@@ -29,8 +30,8 @@ const uploadImage = (fileChooser, previewBlock) => {
       } else {
         const img = document.createElement('img');
         img.src = reader.result;
-        img.width = photoPattern.WIDTH;
-        img.height = photoPattern.HEIGHT;
+        img.width = PhotoPattern.WIDTH;
+        img.height = PhotoPattern.HEIGHT;
         previewBlock.appendChild(img);
       }
     });
