@@ -11,6 +11,10 @@ import {
   createErrorMessage
 } from './modal.js'
 
+import {
+  removeImages
+} from './photo.js'
+
 const adForm = document.querySelector('.ad-form');
 const adFormFieldsets = document.querySelectorAll('fieldset');
 const mapFilters = document.querySelector('.map__filters');
@@ -23,34 +27,31 @@ const clearBtn = document.querySelector('.ad-form__reset');
 const resetForms = () => {
   adForm.reset();
   mapFilters.reset();
-  setTimeout(() => {
-    resetMap();
-  }, 100);
+  resetMap();
+  removeImages();
 };
 
 /**
- * !Функция чтобы не вешать resetForms() на createSuccessMessage() в модале
+ * Функция, вызываемая в случае успешной отправки данных формы
  */
 const succesFormSent = () => {
   createSuccessMessage();
   resetForms();
+  removeImages();
 }
 
 /**
- * Функция отправки формы
+ * Функция отправки данных формы на сервер
  */
-adForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  sendData(succesFormSent, createErrorMessage, new FormData(evt.target));
-});
-
-/**
- * Функция возврата страницы к исходному состоянию по нажатию "очистить"
- */
-clearBtn.addEventListener('click', (evt) => {
-  evt.preventDefault();
-  resetForms();
-});
+const setActionForm = () => {
+  adForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    sendData(succesFormSent, createErrorMessage, new FormData(evt.target));
+  });
+  clearBtn.addEventListener('click', () => {
+    resetForms();
+  });
+};
 
 /**
  * Функция переключения возможности взаимодействия с интерактивными элементами
@@ -79,8 +80,8 @@ const setFormState = (isEnabled) => {
 }
 setFormState(false);
 
-
 export {
+  setActionForm,
   resetForms,
   setFormState
 };

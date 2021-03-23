@@ -1,11 +1,18 @@
 import {
-  isEscEvent,
-  isEnterEvent
+  isEscEvent
 } from './util.js';
 
 const successMessageTemplate = document.querySelector('#success').content.querySelector('.success');
 const errorMessageTemplate = document.querySelector('#error').content.querySelector('.error');
 const main = document.querySelector('main');
+
+/**
+ * Клавиши
+ * @param {object} evt объект события
+ */
+const onModalKeyPress = (evt) => {
+  isEscEvent(evt, modalHide);
+};
 
 /**
  * Функция скрытия модала после отправки формы
@@ -14,15 +21,6 @@ const modalHide = () => {
   const modal = main.querySelector('.success') || main.querySelector('.error');
   modal.remove();
   document.removeEventListener('keydown', onModalKeyPress);
-};
-
-/**
- * Клавиши
- * @param {object} evt объект события
- */
-const onModalKeyPress = (evt) => {
-  isEscEvent(evt, modalHide);
-  isEnterEvent(evt, modalHide);
 };
 
 /**

@@ -1,63 +1,4 @@
-const keyCodes = {
-  ESC: 27,
-  ENTER: 13,
-}
-
-/**
- * Функция получения случайного целого числа из переданного диапазона включительно
- * @param {number} min минимальное значение
- * @param {number} max максимальное значение
- * @returns {number} случайное число
- */
-const getRandomNubmerFromRange = (min, max) => {
-  if (min >= 0 && max > 0 && max > min) {
-    let randomNumber = min + Math.random() * (max - min + 1);
-    return Math.floor(randomNumber);
-  }
-  return 'Ошибка. Диапазон может быть только положительным';
-}
-
-/**
- * Функция получения случайного дробного числа из переданного диапазона включительно
- * @param {number} min минимальное значение
- * @param {number} max максимальное значение
- * @param {number} n количество знаков после запятой
- * @returns {number} случайное число
- */
-const getRandomFloatNubmerFromRange = (min, max, n) => {
-  if (min >= 0 && max > 0 && max > min) {
-    let randomNumber = min + Math.random() * (max - min);
-    return randomNumber.toFixed(n);
-  }
-  return 'Ошибка. Диапазон может быть только положительным';
-}
-
-/**
- * Функция получения случайного элемента из массива
- * @param {array} arr массив
- * @returns {string} случайный элемент массива
- */
-const getRandomElementFromArray = (arr) => {
-  return arr[getRandomNubmerFromRange(0, arr.length - 1)];
-};
-
-/**
- * Функция получения массива случайной длины без повторений
- * @param  {array} arr массив
- * @returns {array} массив случайной длины
- */
-const getRandomLenghtArray = (arr) => {
-  const randomLength = getRandomNubmerFromRange(1, arr.length);
-  let tempArr = arr.slice();
-  let resultArr = [];
-
-  for (let i = 0; i < randomLength; i++) {
-    let randomIndex = getRandomNubmerFromRange(0, tempArr.length - 1);
-    let randomElement = tempArr.splice(randomIndex, 1)[0];
-    resultArr.push(randomElement);
-  }
-  return resultArr;
-};
+const ERR_SHOW_TIME = 5000;
 
 /**
  * Функция склонения слов после числа
@@ -75,33 +16,46 @@ const changeWordsFormat = (n, words) => {
 }
 
 /**
+ * Функция показа ошибки на карте при загрузке данных объявлений
+ * @param {string} err текст ошибки
+ */
+const showErrorGetData = (err) => {
+  const mapContainer = document.querySelector('.map');
+  const errorContainer = document.createElement('div');
+
+  errorContainer.style.zIndex = 1000;
+  errorContainer.style.position = 'absolute';
+  errorContainer.style.left = 0;
+  errorContainer.style.top = 0;
+  errorContainer.style.right = 0;
+  errorContainer.style.padding = '14px 5px';
+  errorContainer.style.fontSize = '18px';
+  errorContainer.style.textAlign = 'center';
+  errorContainer.style.color = 'white';
+  errorContainer.style.backgroundColor = 'red';
+
+  errorContainer.textContent = err;
+
+  mapContainer.append(errorContainer);
+
+  setTimeout(() => {
+    errorContainer.remove();
+  }, ERR_SHOW_TIME);
+};
+
+/**
  * Функция проверки нажатия клавиши "Esc"
  * @param {object} evt объект события
  * @param {object} action функция
  */
 const isEscEvent = (evt, action) => {
-  if (evt.keyCode === keyCodes.ESC) {
-    action()
-  }
-}
-
-/**
- * Функция проверки нажатия клавиши "Enter"
- * @param {object} evt объект события
- * @param {object} action функция
- */
-const isEnterEvent = (evt, action) => {
-  if (evt.keyCode === keyCodes.ENTER) {
+  if (evt.key === ('Escape' || 'Esc')) {
     action()
   }
 }
 
 export {
-  getRandomNubmerFromRange,
-  getRandomFloatNubmerFromRange,
-  getRandomElementFromArray,
-  getRandomLenghtArray,
   changeWordsFormat,
-  isEscEvent,
-  isEnterEvent
+  showErrorGetData,
+  isEscEvent
 };

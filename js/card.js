@@ -35,7 +35,7 @@ const similarCardTemplate = document.querySelector('#card')
  * @param {object} list DOM-нода, в которую добавляются фичи
  * @param {object} features объект, содержащий наименования фич
  */
-const createFeaturesList = (list, features) => {  // стоит ли параметризировать, если функции завернуты под блок renderCard? и завязаны на определенных дом нодах (featuresList, imagesList)
+const createFeaturesList = (list, features) => {
   list.textContent = '';
   if (features.length) {
     features.forEach((feature) => {

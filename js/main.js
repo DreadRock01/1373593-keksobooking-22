@@ -1,3 +1,7 @@
+import './validation.js';
+
+import './photo.js'
+
 import {
   getData
 } from './fetch.js'
@@ -6,12 +10,19 @@ import {
   renderPins
 } from './map.js';
 
-// import {
-//   submitForm
-// } from './form.js';
+import {
+  setActionForm
+} from './form.js';
 
-import './validation.js';
+import {
+  filteringAds
+} from './filter.js';
 
-getData(
-  (data) => renderPins(data),
-);
+
+const OFFERS_LIMIT = 10;
+
+getData((data) => {
+  renderPins(data.slice(0, OFFERS_LIMIT));
+  filteringAds(data.slice(0, OFFERS_LIMIT));
+  setActionForm();
+});
