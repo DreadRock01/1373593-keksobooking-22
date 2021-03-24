@@ -12,7 +12,6 @@ import {
 } from './util.js'
 
 const DEFAULT_ZOOM = 10;
-const ACTION_DELAY = 100;
 const STEP_SIZE = 5;
 
 const addressField = document.querySelector('#address');
@@ -100,6 +99,9 @@ const renderPins = (pins) => {
   markersGroup.addTo(map);
 };
 
+/**
+ * Функция удаления маркеров объявлений
+ */
 const removeMarkers = () => {
   markersGroup.remove();
 };
@@ -108,13 +110,10 @@ const removeMarkers = () => {
  * Функция возврата карты, метки и ее координат к исходному состоянию
  */
 const resetMap = () => {
-  setTimeout(() => {
-    addressFieldValue(); // х3, пока не знаю че делать)
-  }, ACTION_DELAY);
-  mainMarker.setLatLng([defaultCoords.lat, defaultCoords.lng]);
   map.setView(defaultCoords, DEFAULT_ZOOM);
+  mainMarker.setLatLng([defaultCoords.lat, defaultCoords.lng]);
+  addressFieldValue();
   removeMarkers();
-  markersGroup.addTo(map);
 }
 
 export {

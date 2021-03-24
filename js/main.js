@@ -11,18 +11,19 @@ import {
 } from './map.js';
 
 import {
-  setActionForm
+  setActionForm,
+  setFormReset
 } from './form.js';
 
 import {
-  filteringAds
+  filterAds
 } from './filter.js';
-
 
 const OFFERS_LIMIT = 10;
 
 getData((data) => {
   renderPins(data.slice(0, OFFERS_LIMIT));
-  filteringAds(data.slice(0, OFFERS_LIMIT));
-  setActionForm();
+  filterAds(data)
+  setFormReset(data.slice(0, OFFERS_LIMIT));
+  setActionForm(data.slice(0, OFFERS_LIMIT));
 });
