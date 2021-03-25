@@ -11,8 +11,7 @@ import {
   showErrorGetData
 } from './util.js'
 
-const DEF_ZOOM = 10;
-const ACT_DELAY = 100;
+const DEFAULT_ZOOM = 10;
 const STEP_SIZE = 5;
 
 const addressField = document.querySelector('#address');
@@ -32,7 +31,7 @@ const map = L.map('map-canvas')
     addressField.setAttribute('readonly', true);
     addressFieldValue();
   })
-  .setView(defaultCoords, DEF_ZOOM);
+  .setView(defaultCoords, DEFAULT_ZOOM);
 
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -100,6 +99,9 @@ const renderPins = (pins) => {
   markersGroup.addTo(map);
 };
 
+/**
+ * Функция удаления маркеров объявлений
+ */
 const removeMarkers = () => {
   markersGroup.remove();
 };
@@ -108,13 +110,10 @@ const removeMarkers = () => {
  * Функция возврата карты, метки и ее координат к исходному состоянию
  */
 const resetMap = () => {
-  setTimeout(() => {
-    addressFieldValue(); // х3, пока не знаю че делать)
-  }, ACT_DELAY);
+  map.setView(defaultCoords, DEFAULT_ZOOM);
   mainMarker.setLatLng([defaultCoords.lat, defaultCoords.lng]);
-  map.setView(defaultCoords, DEF_ZOOM);
+  addressFieldValue();
   removeMarkers();
-  markersGroup.addTo(map);
 }
 
 export {

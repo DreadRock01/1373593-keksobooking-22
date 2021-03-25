@@ -4,6 +4,8 @@ import {
   removeMarkers
 } from './map.js';
 
+const OFFERS_LIMIT = 10;
+
 const DELAY_TIMER = 500;
 
 const mapFilters = document.querySelector('.map__filters');
@@ -13,18 +15,18 @@ const housingRooms = mapFilters.querySelector('#housing-rooms');
 const housingGuests = mapFilters.querySelector('#housing-guests');
 const housingFeatures = mapFilters.querySelector('#housing-features');
 
-const PriceLength = {
-  LOW: {
-    MIN: 0,
-    MAX: 10000,
+const priceLength = {
+  low: {
+    min: 0,
+    max: 10000,
   },
-  MIDDLE: {
-    MIN: 10000,
-    MAX: 50000,
+  middle: {
+    min: 10000,
+    max: 50000,
   },
-  HIGH: {
-    MIN: 50000,
-    MAX: Infinity,
+  high: {
+    min: 50000,
+    max: Infinity,
   },
 };
 
@@ -43,12 +45,12 @@ const filteringItem = (element, position, filterType) => {
 };
 
 /**
- * Функция фильтрации по типу жилья
+ * Функция фильтрации по параметрам жилья
  * @param {object} element элемент фильтрации
  * @returns {object} массив выбранных элементов
  */
-const filterByType = (element) => {
-  return filteringItem(element, housingType, 'type');
+const filterByHousingParams = (element) => {
+  return filteringItem(element, housingType, 'type')  && filteringItem(element, housingRooms, 'rooms') && filteringItem(element, housingGuests, 'guests');
 };
 
 /**
@@ -57,35 +59,18 @@ const filterByType = (element) => {
  * @returns {*} проверка стоимости
  */
 const filterByPrice = (element) => {
-  const filteringPrice = PriceLength[housingPrice.value.toUpperCase()];
+  const filteringPrice = priceLength[housingPrice.value];
   if (housingPrice.value === 'any') {
     return true
   }
-  return element.offer.price >= filteringPrice.MIN && element.offer.price <= filteringPrice.MAX;
-};
-
-/**
- * Функция фильтрации по кол-ву комнат
- * @param {object} element элемент фильтрации
- * @returns {object} массив выбранных элементов
- */
-const filterByRooms = (element) => {
-  return filteringItem(element, housingRooms, 'rooms');
-};
-
-/**
- * Функция фильтрации по гостям
- * @param {object} element элемент фильтрации
- * @returns {object} массив выбранных элементов
- */
-const filterByGuests = (element) => {
-  return filteringItem(element, housingGuests, 'guests');
+  return element.offer.price >= filteringPrice.min && element.offer.price <= filteringPrice.max;
 };
 
 /**
  * Функция фильтрации по преимуществам
  * @param {object} element элемент фильтрации
- * @returns {object} массив выбранных элементов
+ * @returns {object} массив чекнутых элементов
+ * @returns {boolean} результат проверки условия
  */
 const filterByFeatures = (element) => {
   const checkedFeatures = housingFeatures.querySelectorAll('input:checked');
@@ -96,21 +81,19 @@ const filterByFeatures = (element) => {
 
 /**
  * Функция фильтрации объявлений
- * @param {object} housingElements массив отфильтрованных элементов
+ * @param {object} filteredAnnouncements массив отфильтрованных элементов
  */
-const filteringAds = (filteredAnnouncements) => {
+const filterAds = (filteredAnnouncements) => {
   mapFilters.addEventListener('change', _.debounce(() => {
     const sameAnnouncements = filteredAnnouncements
-      .filter(filterByType)
+      .filter(filterByHousingParams)
       .filter(filterByPrice)
-      .filter(filterByRooms)
-      .filter(filterByGuests)
       .filter(filterByFeatures)
     removeMarkers();
-    renderPins(sameAnnouncements);
+    renderPins(sameAnnouncements.slice(0, OFFERS_LIMIT));
   }, DELAY_TIMER));
 };
 export {
-  filteringAds
+  OFFERS_LIMIT,
+  filterAds
 };
-

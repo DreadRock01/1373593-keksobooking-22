@@ -3,6 +3,7 @@ import {
 } from './fetch.js'
 
 import {
+  renderPins,
   resetMap
 } from './map.js'
 
@@ -22,13 +23,25 @@ const mapFiltersSelects = mapFilters.querySelectorAll('.map__filter');
 const clearBtn = document.querySelector('.ad-form__reset');
 
 /**
- * Функция возврата страницы к исходному состоянию
+ * Функция сброса полей формы и селектов фильтрации
  */
-const resetForms = () => {
+const resetFormFilters = () => {
   adForm.reset();
   mapFilters.reset();
-  resetMap();
-  removeImages();
+}
+
+/**
+ * Функция сброса формы при чистке или успешной отправке формы
+ * @param {object} announcements массив полученных данных
+ */
+const setFormReset = (announcements) => {
+  clearBtn.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    resetFormFilters();
+    removeImages();
+    resetMap();
+    renderPins(announcements)
+  });
 };
 
 /**
@@ -36,20 +49,22 @@ const resetForms = () => {
  */
 const succesFormSent = () => {
   createSuccessMessage();
-  resetForms();
+  resetFormFilters()
+  resetMap();
   removeImages();
 }
 
 /**
  * Функция отправки данных формы на сервер
+ * @param {object} announcements массив полученных данных
  */
-const setActionForm = () => {
+const setActionForm = (announcements) => {
   adForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
-    sendData(succesFormSent, createErrorMessage, new FormData(evt.target));
-  });
-  clearBtn.addEventListener('click', () => {
-    resetForms();
+    sendData(() => {
+      succesFormSent();
+      renderPins(announcements);
+    }, createErrorMessage, new FormData(evt.target));
   });
 };
 
@@ -81,7 +96,8 @@ const setFormState = (isEnabled) => {
 setFormState(false);
 
 export {
+  setFormReset,
   setActionForm,
-  resetForms,
-  setFormState
+  setFormState,
+  succesFormSent
 };

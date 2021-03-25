@@ -2,13 +2,6 @@ import {
   changeWordsFormat
 } from './util.js';
 
-const offerType = {
-  palace: 'Дворец',
-  flat: 'Квартира',
-  house: 'Дом',
-  bungalow: 'Бунгало',
-};
-
 const ROOMS = [
   'комната',
   'комнаты',
@@ -21,9 +14,16 @@ const GUESTS = [
   'гостей',
 ];
 
-const imagesSizes = {
+const ImagesSizes = {
   WIDTH: 45,
   HEIGHT: 40,
+};
+
+const offerType = {
+  palace: 'Дворец',
+  flat: 'Квартира',
+  house: 'Дом',
+  bungalow: 'Бунгало',
 };
 
 const similarCardTemplate = document.querySelector('#card')
@@ -60,8 +60,8 @@ const createImagesList = (list, images) => {
       let imageItem = document.createElement('img');
       imageItem.src = image;
       imageItem.classList.add('popup__photo');
-      imageItem.style.width = `${imagesSizes.WIDTH}px`;
-      imageItem.style.height = `${imagesSizes.HEIGHT}px`;
+      imageItem.style.width = `${ImagesSizes.WIDTH}px`;
+      imageItem.style.height = `${ImagesSizes.HEIGHT}px`;
       list.appendChild(imageItem);
     });
   } else {
