@@ -20,6 +20,7 @@ const adForm = document.querySelector('.ad-form');
 const adFormFieldsets = document.querySelectorAll('fieldset');
 const mapFilters = document.querySelector('.map__filters');
 const mapFiltersSelects = mapFilters.querySelectorAll('.map__filter');
+const clearBtn = document.querySelector('.ad-form__reset');
 
 /**
  * Функция сброса полей формы и селектов фильтрации
@@ -34,11 +35,12 @@ const resetFormFilters = () => {
  * @param {object} announcements массив полученных данных
  */
 const setFormReset = (announcements) => {
-  adForm.addEventListener('reset', () => {
-    mapFilters.reset();
+  clearBtn.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    resetFormFilters();
     removeImages();
-    renderPins(announcements)
     resetMap();
+    renderPins(announcements)
   });
 };
 

@@ -16,10 +16,9 @@ import {
 } from './form.js';
 
 import {
+  OFFERS_LIMIT,
   filterAds
 } from './filter.js';
-
-const OFFERS_LIMIT = 10;
 
 getData((data) => {
   renderPins(data.slice(0, OFFERS_LIMIT));

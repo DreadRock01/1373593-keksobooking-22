@@ -4,6 +4,8 @@ import {
   removeMarkers
 } from './map.js';
 
+const OFFERS_LIMIT = 10;
+
 const DELAY_TIMER = 500;
 
 const mapFilters = document.querySelector('.map__filters');
@@ -88,10 +90,10 @@ const filterAds = (filteredAnnouncements) => {
       .filter(filterByPrice)
       .filter(filterByFeatures)
     removeMarkers();
-    renderPins(sameAnnouncements);
+    renderPins(sameAnnouncements.slice(0, OFFERS_LIMIT));
   }, DELAY_TIMER));
 };
 export {
+  OFFERS_LIMIT,
   filterAds
 };
-
