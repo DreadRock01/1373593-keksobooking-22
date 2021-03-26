@@ -1,4 +1,5 @@
-/* global _:readonly */
+import _ from 'lodash';
+
 import {
   renderPins,
   removeMarkers

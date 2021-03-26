@@ -47,7 +47,7 @@ const setFormReset = (announcements) => {
 /**
  * Функция, вызываемая в случае успешной отправки данных формы
  */
-const succesFormSent = () => {
+const sendFormSuccess = () => {
   createSuccessMessage();
   resetFormFilters()
   resetMap();
@@ -62,7 +62,7 @@ const setActionForm = (announcements) => {
   adForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     sendData(() => {
-      succesFormSent();
+      sendFormSuccess();
       renderPins(announcements);
     }, createErrorMessage, new FormData(evt.target));
   });
@@ -85,11 +85,11 @@ const setFormState = (isEnabled) => {
   } else {
     adForm.classList.remove('ad-form--disabled');
     adFormFieldsets.forEach((elem) => {
-      elem.removeAttribute('disabled', '');
+      elem.removeAttribute('disabled');
     });
     mapFilters.classList.remove('map__filters--disabled');
     mapFiltersSelects.forEach((elem) => {
-      elem.removeAttribute('disabled', '');
+      elem.removeAttribute('disabled');
     });
   }
 }
@@ -98,6 +98,5 @@ setFormState(false);
 export {
   setFormReset,
   setActionForm,
-  setFormState,
-  succesFormSent
+  setFormState
 };
